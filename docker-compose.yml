@@ -1,0 +1,29 @@
+version: "3"
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+    ports:
+      - "3306:3306"
+    container_name: mybd
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    container_name: phpmybd
+    depends_on:
+      - db
+    links:
+      - db:db
+  web:
+    build: .
+    ports:
+      - "8081:80"
+    container_name: serviceweb
+    depends_on:
+      - db
+    links:
+      - db:mysql
